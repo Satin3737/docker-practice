@@ -1,0 +1,29 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "paths": {
+            "@/*": ["./src/*"]
+        },
+
+        "target": "esnext",
+        "useDefineForClassFields": true,
+        "module": "esnext",
+        "lib": ["esnext"],
+        "types": ["node"],
+        "skipLibCheck": true,
+
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+        "noEmit": true,
+
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "erasableSyntaxOnly": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true
+    },
+    "include": ["src", ".prettierrc.ts", "prisma/seed.ts"],
+    "exclude": ["node_modules", "src/database/prisma", "src/database/zod"]
+}
