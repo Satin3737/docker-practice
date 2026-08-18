@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/database/prisma"
+}
+
+generator zod {
+  provider = "prisma-zod-generator"
+  output   = "../src/database/zod"
+  config   = "./zod-generator.config.json"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PostStatus {
+  published
+  draft
+  scheduled
+}
+
+model Post {
+  id        Int        @id @default(autoincrement())
+  title     String
+  content   String
+  status    PostStatus
+  topic     Topic?     @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  topicId   Int?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt
+
+  @@map("posts")
+}
+
+model Topic {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  posts       Post[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  @@map("topics")
+}
