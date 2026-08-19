@@ -1,7 +1,7 @@
 import {defineConfig} from 'oxlint';
 
 export default defineConfig({
-    plugins: ['typescript', 'react', 'oxc'],
+    plugins: ['typescript', 'oxc'],
     categories: {
         correctness: 'error'
     },
@@ -22,10 +22,6 @@ export default defineConfig({
             }
         ],
         'typescript/no-explicit-any': ['error', {ignoreRestArgs: true}],
-        'typescript/no-duplicate-enum-values': 'off',
-        'react/rules-of-hooks': 'error',
-        'react/exhaustive-deps': 'warn',
-        'react/react-compiler': 'warn',
-        'react/only-export-components': ['warn', {allowConstantExport: true}]
+        'typescript/no-duplicate-enum-values': 'off'
     }
 });
