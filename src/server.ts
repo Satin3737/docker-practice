@@ -26,7 +26,7 @@ class Server {
 
     public async listen(): Promise<void> {
         try {
-            await this.app.listen({port: this.app.config.PORT});
+            await this.app.listen({port: this.app.config.PORT, host: this.app.config.HOST});
             this.listenShutdownProcessSignals();
         } catch (err) {
             this.app.log.error(err);
