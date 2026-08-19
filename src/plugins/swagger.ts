@@ -1,4 +1,5 @@
 import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
 import fp from 'fastify-plugin';
 import {jsonSchemaTransform} from 'fastify-type-provider-zod';
 
@@ -12,8 +13,8 @@ const swaggerPlugin = fp(
                     version: '1.0.0'
                 },
                 tags: [
-                    {name: 'Missions', description: 'Combat missions'},
-                    {name: 'Weapons', description: 'Weapons arsenal'}
+                    {name: 'Posts', description: 'Posts management'},
+                    {name: 'Topics', description: 'Topics management'}
                 ]
             },
             transform: jsonSchemaTransform
@@ -25,6 +26,8 @@ const swaggerPlugin = fp(
             routeOptions.schema ??= {};
             routeOptions.schema.tags ??= [segment[0].toUpperCase() + segment.slice(1)];
         });
+
+        await fastify.register(swaggerUi, {routePrefix: '/docs'});
     },
     {name: 'swagger'}
 );
