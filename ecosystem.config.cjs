@@ -29,6 +29,7 @@ module.exports = {
             max_restarts: 10,
             min_uptime: '10s',
             kill_timeout: 5000,
+            merge_logs: true,
             cwd: __dirname
         },
         {

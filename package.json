@@ -18,7 +18,8 @@
         "db:status": "pnpm dlx prisma migrate status",
         "db:studio": "pnpm dlx prisma studio",
         "db:seed": "tsx prisma/seed.ts",
-        "prod": "pnpm dlx pm2-runtime start ecosystem.config.cjs"
+        "prod": "pnpm dlx pm2-runtime start ecosystem.config.cjs",
+        "monitor": "pnpm dlx pm2 monit"
     },
     "author": "satin",
     "license": "ISC",
