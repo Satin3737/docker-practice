@@ -1,45 +1,36 @@
+x-app-common: &app-common
+    restart: unless-stopped
+    ports:
+        - "${PORT:-3000}:3000"
+    env_file:
+        - .env
+    environment:
+        - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@docker-practice-postgres:5432/${POSTGRES_DB}?schema=public
+        - REDIS_URL=redis://:${REDIS_PASSWORD}@docker-practice-redis:6379
+    depends_on:
+        docker-practice-postgres:
+            condition: service_healthy
+        docker-practice-redis:
+            condition: service_healthy
+
 services:
     docker-practice-app:
+        <<: *app-common
         build:
             context: .
             dockerfile: Dockerfile
             target: dev
-        restart: unless-stopped
-        ports:
-            - "${PORT:-3000}:3000"
-        env_file:
-            - .env
-        environment:
-            - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@docker-practice-postgres:5432/${POSTGRES_DB}?schema=public
-            - REDIS_URL=redis://:${REDIS_PASSWORD}@docker-practice-redis:6379
         volumes:
             - .:/app
             - /app/node_modules
-        depends_on:
-            docker-practice-postgres:
-                condition: service_healthy
-            docker-practice-redis:
-                condition: service_healthy
 
     docker-practice-app-prod:
+        <<: *app-common
         profiles: ["prod"]
         build:
             context: .
             dockerfile: Dockerfile
             target: prod
-        restart: unless-stopped
-        ports:
-            - "${PORT:-3000}:3000"
-        env_file:
-            - .env
-        environment:
-            - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@docker-practice-postgres:5432/${POSTGRES_DB}?schema=public
-            - REDIS_URL=redis://:${REDIS_PASSWORD}@docker-practice-redis:6379
-        depends_on:
-            docker-practice-postgres:
-                condition: service_healthy
-            docker-practice-redis:
-                condition: service_healthy
 
     docker-practice-postgres:
         image: postgres:18

@@ -1,7 +1,7 @@
-dev:
+up:
 	docker compose up
 
-dev-rebuild:
+up-rebuild:
 	docker compose up --build -V
 
 build:
