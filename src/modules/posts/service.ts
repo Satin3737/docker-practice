@@ -1,16 +1,28 @@
+import type {Queue} from 'bullmq';
+import type {IEmailNotificationParams} from '@/common/notifications/types';
 import type {IEntityListParams} from '@/common/types';
 import type {Post, PrismaClient} from '@/database/prisma/client';
 import type {ICreatePostData, IPostListResponse, IPostSearchWhere, IUpdatePostData} from './types';
 
 class PostsService {
     private readonly db: PrismaClient;
+    private readonly emailQueue: Queue<IEmailNotificationParams>;
 
-    public constructor(db: PrismaClient) {
+    public constructor(db: PrismaClient, emailQueue: Queue<IEmailNotificationParams>) {
         this.db = db;
+        this.emailQueue = emailQueue;
     }
 
-    public createPost(data: ICreatePostData): Promise<Post> {
-        return this.db.post.create({data});
+    public async createPost(data: ICreatePostData): Promise<Post> {
+        const post = await this.db.post.create({data});
+
+        void this.emailQueue.add('postCreated', {
+            to: 'somebody',
+            message: 'New post created',
+            date: post.createdAt
+        });
+
+        return post;
     }
 
     public async getPosts({limit, page, search}: IEntityListParams): Promise<IPostListResponse> {
@@ -32,12 +44,28 @@ class PostsService {
         return this.db.post.findUniqueOrThrow({where: {id}});
     }
 
-    public updatePost(id: number, data: IUpdatePostData): Promise<Post> {
-        return this.db.post.update({where: {id}, data});
+    public async updatePost(id: number, data: IUpdatePostData): Promise<Post> {
+        const post = await this.db.post.update({where: {id}, data});
+
+        void this.emailQueue.add('postUpdated', {
+            to: 'somebody',
+            message: 'Post updated',
+            date: post.updatedAt ?? new Date()
+        });
+
+        return post;
     }
 
-    public deletePost(id: number): Promise<Post> {
-        return this.db.post.delete({where: {id}});
+    public async deletePost(id: number): Promise<Post> {
+        const post = await this.db.post.delete({where: {id}});
+
+        void this.emailQueue.add('postDeleted', {
+            to: 'somebody',
+            message: 'Post deleted',
+            date: new Date()
+        });
+
+        return post;
     }
 
     public async getPostsByTopic(

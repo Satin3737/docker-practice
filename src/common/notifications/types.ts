@@ -1,5 +1,4 @@
 export interface INotificationParams {
-    title: string;
     message: string;
     date: Date;
 }
