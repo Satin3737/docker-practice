@@ -6,6 +6,7 @@ import {getLoggerConfig} from '@/common/logger';
 
 class Server {
     public readonly app: FastifyInstance;
+    public static isShuttingDown: boolean = false;
 
     public constructor() {
         this.app = Fastify({
@@ -40,6 +41,9 @@ class Server {
     }
 
     private async shutdown(signal: string): Promise<void> {
+        if (Server.isShuttingDown) return;
+        Server.isShuttingDown = true;
+
         this.app.log.info(`Shutting down server due to ${signal}...`);
 
         try {

@@ -14,7 +14,8 @@ const swaggerPlugin = fp(
                 },
                 tags: [
                     {name: 'Posts', description: 'Posts management'},
-                    {name: 'Topics', description: 'Topics management'}
+                    {name: 'Topics', description: 'Topics management'},
+                    {name: 'Health', description: 'Health check'}
                 ]
             },
             transform: jsonSchemaTransform
