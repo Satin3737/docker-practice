@@ -1,10 +1,19 @@
-const workerConfig = {
+const envConfig = {
+    production: {
+        NODE_ENV: 'production',
+        PORT: 3000
+    },
+    development: {
+        NODE_ENV: 'development',
+        PORT: 3000
+    }
+};
+
+const commonConfig = {
+    env: envConfig.production,
     instances: 1,
     exec_mode: 'fork',
-    env: {
-        NODE_ENV: 'production'
-    },
-    max_memory_restart: '256M',
+    watch: false,
     autorestart: true,
     max_restarts: 10,
     min_uptime: '10s',
@@ -15,32 +24,23 @@ const workerConfig = {
 module.exports = {
     apps: [
         {
+            ...commonConfig,
             name: 'api',
             script: './dist/app.js',
-            instances: 4,
-            exec_mode: 'cluster',
-            env: {
-                NODE_ENV: 'production',
-                PORT: 3000
-            },
             max_memory_restart: '1G',
-            watch: false,
-            autorestart: true,
-            max_restarts: 10,
-            min_uptime: '10s',
-            kill_timeout: 5000,
-            merge_logs: true,
-            cwd: __dirname
+            merge_logs: true
         },
         {
+            ...commonConfig,
             name: 'email-worker',
             script: './dist/workers/processes/email.js',
-            ...workerConfig
+            max_memory_restart: '256M'
         },
         {
+            ...commonConfig,
             name: 'push-worker',
             script: './dist/workers/processes/push.js',
-            ...workerConfig
+            max_memory_restart: '256M'
         }
     ]
 };
