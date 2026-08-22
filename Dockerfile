@@ -21,7 +21,7 @@ FROM deps AS build
 COPY . .
 # prisma generate only needs a syntactically valid URL, not a live connection
 ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
-RUN pnpm exec prisma generate
+RUN pnpm db:generate
 RUN pnpm build
 
 # --- prod-deps: node_modules from deps, stripped of devDependencies ---
