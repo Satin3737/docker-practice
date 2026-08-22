@@ -20,16 +20,16 @@ build:
 	docker build --target prod -t docker-practice:prod .
 
 prod:
-	docker compose --profile prod up --build docker-practice-app-prod
+	docker compose --profile prod up --build --scale docker-practice-app-prod=4 docker-practice-app-prod docker-practice-nginx-prod
 
 prod-logs:
 	docker compose logs docker-practice-app-prod -f --no-log-prefix | pnpm exec pino-pretty
 
 prod-monitor:
-	docker compose exec docker-practice-app-prod pnpm monitor
+	docker compose exec --index=$(or $(I), 1) docker-practice-app-prod pnpm monitor
 
 prod-sh:
-	docker compose exec docker-practice-app-prod sh
+	docker compose exec --index=$(or $(I), 1) docker-practice-app-prod sh
 
 down:
 	docker compose down
