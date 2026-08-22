@@ -39,5 +39,6 @@ COPY --from=build /app/src/common ./src/common
 COPY prisma ./prisma
 COPY prisma.config.ts ./
 COPY ecosystem.config.cjs ./
+COPY scripts ./scripts
 EXPOSE 3000
 CMD ["sh", "-c", "pnpm db:migrate-deploy && pnpm prod"]
